@@ -2,6 +2,7 @@ import { useReducer } from "react";
 import { reducer, initialState } from "./reducer/boardReducer.js";
 
 import "./App.css";
+import Board from "./components/Board.jsx";
 
 /*
 Базовая структура:
@@ -13,12 +14,14 @@ Task -> Id, Title, Description
 */
 
 export default function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [board, dispatch] = useReducer(reducer, initialState);
 
   return (
     <>
       <h1>Wild Kanban!</h1>
-      <pre>{JSON.stringify(state, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
+
+      <Board board={board} dispatch={dispatch} />
     </>
   );
 }

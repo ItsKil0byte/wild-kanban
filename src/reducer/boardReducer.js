@@ -17,6 +17,11 @@ const initialState = {
       title: "Запланировано",
       tasks: [],
     },
+    {
+        id: 2,
+        title: "В процессе",
+        tasks: [],
+    }
   ],
 };
 
