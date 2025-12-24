@@ -80,64 +80,36 @@ function reducer(state, action) {
       return { ...state, columns: updated };
     }
     case "MOVE_TASK": {
-      const { fromColumnId, toColumnId, taskId, toIndex, fromIndex } =
-        action.payload;
+      const { fromColumnId, toColumnId, taskId } = action.payload;
 
-      if (fromColumnId === toColumnId) {
-        return {
-          ...state,
-          columns: state.columns.map((column) => {
-            if (column.id === fromColumnId) {
-              const tasks = [...column.tasks];
-              if (
-                fromIndex === toIndex ||
-                fromIndex < 0 ||
-                fromIndex >= tasks.length
-              ) {
-                return column;
-              }
-
-              const taskToMove = tasks[fromIndex];
-
-              let adjustedToIndex = toIndex;
-              if (fromIndex < toIndex) {
-                adjustedToIndex = toIndex - 1;
-              }
-
-              tasks.splice(fromIndex, 1);
-              tasks.splice(adjustedToIndex, 0, taskToMove);
-
-              return { ...column, tasks };
-            }
-            return column;
-          }),
-        };
-      }
+      let taskToMove = null;
 
       const updated = state.columns.map((column) => {
         if (column.id === fromColumnId) {
-          return {
-            ...column,
-            tasks: column.tasks.filter((task) => task.id !== taskId),
-          };
-        } else if (column.id === toColumnId) {
-          const tasks = [...column.tasks];
-
-          tasks.splice(
-            toIndex,
-            0,
-            state.columns
-              .find((col) => col.id === fromColumnId)
-              .tasks.find((task) => task.id === taskId)
-          );
-
-          return { ...column, tasks };
+          const tasks = column.tasks.filter((task) => {
+            if (task.id === taskId) {
+              taskToMove = task;
+              return false;
+            }
+            return true;
+          });
+          return { ...column, tasks: tasks };
         }
-
         return column;
       });
 
-      return { ...state, columns: updated };
+      if (!taskToMove) {
+        return state;
+      }
+
+      const finaled = updated.map((column) => {
+        if (column.id === toColumnId) {
+          return { ...column, tasks: [...column.tasks, taskToMove] };
+        }
+        return column;
+      });
+
+      return { ...state, columns: finaled };
     }
   }
 }

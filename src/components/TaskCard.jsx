@@ -1,11 +1,4 @@
-export default function TaskCard({
-  task,
-  columnId,
-  dispatch,
-  index,
-  isFirst,
-  isLast,
-}) {
+export default function TaskCard({ task, columnId, dispatch }) {
   return (
     <div
       draggable={true}
@@ -14,7 +7,6 @@ export default function TaskCard({
           "text/plain",
           JSON.stringify({
             fromColumnId: columnId,
-            fromIndex: index,
             taskId: task.id,
           })
         );
@@ -24,56 +16,16 @@ export default function TaskCard({
       <h3>{task.title}</h3>
       <p>{task.description}</p>
 
-      <div>
-        {!isFirst && (
-          <button
-            onClick={() =>
-              dispatch({
-                type: "MOVE_TASK",
-                payload: {
-                  fromColumnId: columnId,
-                  toColumnId: columnId - 1,
-                  taskId: task.id,
-                  toIndex: 0,
-                  fromIndex: index,
-                },
-              })
-            }
-          >
-            ⬅️
-          </button>
-        )}
-
-        {!isLast && (
-          <button
-            onClick={() =>
-              dispatch({
-                type: "MOVE_TASK",
-                payload: {
-                  fromColumnId: columnId,
-                  toColumnId: columnId + 1,
-                  taskId: task.id,
-                  toIndex: 0,
-                  fromIndex: index,
-                },
-              })
-            }
-          >
-            ➡️
-          </button>
-        )}
-
-        <button
-          onClick={() =>
-            dispatch({
-              type: "DELETE_TASK",
-              payload: { columnId, taskId: task.id },
-            })
-          }
-        >
-          🗑️
-        </button>
-      </div>
+      <button
+        onClick={() =>
+          dispatch({
+            type: "DELETE_TASK",
+            payload: { columnId, taskId: task.id },
+          })
+        }
+      >
+        🗑️
+      </button>
     </div>
   );
 }

@@ -1,9 +1,11 @@
-import TaskCard from "./TaskCard.jsx";
+import TaskCard from "./TaskCard";
 
-export default function Column({ column, dispatch, isFirst, isLast }) {
+export default function Column({ column, dispatch }) {
   const handleDrop = (e) => {
     e.preventDefault();
     const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+
+    if (data.fromColumnId === column.id) return;
 
     dispatch({
       type: "MOVE_TASK",
@@ -11,8 +13,6 @@ export default function Column({ column, dispatch, isFirst, isLast }) {
         fromColumnId: data.fromColumnId,
         toColumnId: column.id,
         taskId: data.taskId,
-        fromIndex: data.fromIndex,
-        toIndex: column.tasks.length,
       },
     });
   };
@@ -25,6 +25,7 @@ export default function Column({ column, dispatch, isFirst, isLast }) {
   return (
     <div onDrop={handleDrop} onDragOver={handleDragOver}>
       <h2>{column.title}</h2>
+
       <button
         onClick={() =>
           dispatch({ type: "DELETE_COLUMN", payload: { columnId: column.id } })
@@ -32,19 +33,15 @@ export default function Column({ column, dispatch, isFirst, isLast }) {
       >
         🗑️
       </button>
-      {column.tasks.map((task, index) => {
-        return (
-          <TaskCard
-            key={task.id}
-            columnId={column.id}
-            task={task}
-            dispatch={dispatch}
-            isFirst={isFirst}
-            isLast={isLast}
-            index={index}
-          />
-        );
-      })}
+
+      {column.tasks.map((task) => (
+        <TaskCard
+          key={task.id}
+          task={task}
+          columnId={column.id}
+          dispatch={dispatch}
+        />
+      ))}
     </div>
   );
 }
