@@ -18,19 +18,22 @@ export default function NewColumnForm({ dispatch }) {
             setInputValue(""); // Очищаем поле ввода
           }}
         >
-          <input
-            type="text"
-            placeholder="Название колонки"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-          <button
-            className="primary"
-            type="submit"
-            disabled={!inputValue || inputValue.trim() === ""}
-          >
-            + Добавить
-          </button>
+          <div className="form-actions">
+            {/* Немного схитрил и засунул поле ввода внутрь блока с кнопками */}
+            <input
+              type="text"
+              placeholder="Название колонки"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+            <button
+              className="primary"
+              type="submit"
+              disabled={!inputValue || inputValue.trim() === ""}
+            >
+              Добавить
+            </button>
+          </div>
         </form>
       </div>
     </div>

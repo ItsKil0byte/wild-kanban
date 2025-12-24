@@ -57,11 +57,11 @@ export default function Column({ column, dispatch }) {
       </div>
 
       <div className="column-footer">
-        <button className="primary" onClick={() => setIsModalOpen(true)}>
+        <button className="add-task" onClick={() => setIsModalOpen(true)}>
           Новая задача
         </button>
         <button
-          className="column-delete"
+          className="danger"
           onClick={() =>
             dispatch({
               type: "DELETE_COLUMN",

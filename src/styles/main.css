@@ -1,15 +1,37 @@
 /* Переменные */
 :root {
   --bg: #f4f6fb;
-  --column-bg: #ffffff;
-  --card-bg: #ffffff;
+
+  /* Surfaces */
+  --surface: #ffffff;
+  --white: #ffffff;
+  --column-bg: var(--surface);
+  --card-bg: var(--surface);
+
+  /* Brand */
   --accent: #2563eb;
   --accent-hover: #1d4ed8;
   --danger: #ff3c3c;
   --danger-hover: #b91c1c;
+  --reg-button: #e5e7eb;
+  --reg-button-hover: #d1d5db;
   --text: #111827;
   --muted: #6b7280;
   --border: #d2d3d5;
+
+  /* Shadows */
+  --shadow-xsm: rgba(0, 0, 0, 0.05);
+  --shadow-sm: rgba(0, 0, 0, 0.06);
+  --shadow-md: rgba(0, 0, 0, 0.08);
+  --shadow-lg: rgba(0, 0, 0, 0.1);
+  --shadow-xl: rgba(0, 0, 0, 0.15);
+
+  /* Accent / danger shadows and focus rings */
+  --accent-shadow: rgba(37, 99, 235, 0.2);
+  --accent-shadow-strong: rgba(37, 99, 235, 0.25);
+  --danger-shadow: rgba(255, 60, 60, 0.25);
+  --focus-ring: rgba(37, 99, 235, 0.1);
+  --on-accent: #ffffff;
 
   --radius: 8px;
   --radius-sm: 6px;
@@ -18,6 +40,11 @@
   --space-sm: 8px;
   --space-md: 12px;
   --space-lg: 16px;
+
+  /* Длительность анимаций */
+  --transition-fast: 0.15s ease-out;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
 }
 
 * {
@@ -29,39 +56,58 @@ body {
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg);
   color: var(--text);
+  transition: background var(--transition-normal);
 }
 
 /* Страница */
-
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  opacity: 1;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .app-header {
   padding: var(--space-lg);
   border-bottom: 1px solid var(--border);
-  background: #fff;
+  background: var(--surface);
+  transition: box-shadow var(--transition-fast);
+}
+
+.app-header:hover {
+  box-shadow: 0 2px 8px var(--shadow-md);
 }
 
 .app-footer {
-  background: #fff;
+  background: var(--surface);
   padding: var(--space-md);
   border-top: 1px solid var(--border);
   text-align: center;
   font-size: 0.85rem;
   color: var(--muted);
+  transition: background var(--transition-fast);
 }
 
 .app-title {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
+  transition: color var(--transition-fast);
 }
 
 /* Доска */
-
 .board {
   flex: 1;
   display: flex;
@@ -69,10 +115,21 @@ body {
   padding: var(--space-lg);
   overflow-x: auto;
   align-items: flex-start;
+  animation: slideIn 0.6s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Колонки */
-
 .column {
   background: var(--column-bg);
   border-radius: var(--radius);
@@ -80,7 +137,36 @@ body {
   min-width: 300px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 4px var(--shadow-sm);
+  transition: all var(--transition-normal), transform var(--transition-fast);
+  opacity: 1;
+  animation: slideUp var(--transition-fast) ease-out forwards;
+  transform-origin: top center;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.75);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.column:hover {
+  box-shadow: 0 4px 12px var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.column.drag-over {
+  outline: 2px dashed var(--accent);
+  outline-offset: -2px;
+  background: var(--accent-bg-light);
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px var(--accent-shadow);
+  transition: all var(--transition-fast);
 }
 
 .column-header {
@@ -89,24 +175,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: border-color var(--transition-fast);
 }
 
 .column-title {
   font-size: 1rem;
   font-weight: 750;
   margin: 0;
-}
-
-.column-delete {
-  background: var(--danger);
-  color: #fff;
-  border: 1px solid var(--border);
-  cursor: pointer;
-  font-size: 0.8rem;
-}
-
-.column-delete:hover {
-  background: var(--danger-hover);
+  transition: color var(--transition-fast);
 }
 
 .column-body {
@@ -115,11 +191,7 @@ body {
   flex-direction: column;
   gap: var(--space-sm);
   min-height: 60px;
-}
-
-.column.drag-over {
-  outline: 2px dashed var(--accent);
-  outline-offset: -2px;
+  transition: background var(--transition-fast);
 }
 
 .column-footer {
@@ -128,6 +200,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: border-color var(--transition-fast);
 }
 
 /* Задачи */
@@ -136,11 +209,34 @@ body {
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   padding: var(--space-sm);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px var(--shadow-xsm);
   cursor: grab;
+  transition: all var(--transition-normal);
+  animation: fadeInTask 0.3s ease-out forwards;
+}
+
+@keyframes fadeInTask {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .task-card:active {
+  cursor: grabbing;
+  transform: scale(0.99);
+  box-shadow: 0 4px 8px var(--shadow-lg);
+}
+
+.task-card.dragging {
+  opacity: 0.7;
+  transform: rotate(2deg) scale(1.02);
+  box-shadow: 0 8px 16px var(--shadow-xl);
+  z-index: 1000;
   cursor: grabbing;
 }
 
@@ -148,76 +244,115 @@ body {
   font-size: 0.95rem;
   font-weight: 700;
   margin: 0 0 var(--space-xs) 0;
+  transition: color var(--transition-fast);
 }
 
 .task-description {
   font-size: 0.85rem;
   color: var(--muted);
+  transition: color var(--transition-fast);
 }
 
 .task-actions {
   margin-top: var(--space-sm);
   display: flex;
   gap: var(--space-xs);
+  opacity: 0;
+  transform: translateY(5px);
+  transition: all var(--transition-fast);
+}
+
+.task-card:hover .task-actions {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Кнопки */
-
 button {
+  background: var(--reg-button);
+  border: none;
+  padding: 6px 12px;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: #fff;
-  padding: 4px 8px;
-  font-size: 0.8rem;
   cursor: pointer;
+  font-size: 0.85rem;
+  transition: all var(--transition-fast);
 }
 
 button:hover {
-  background: #f9fafb;
+  background: var(--reg-button-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px var(--shadow-xsm);
 }
 
 button.primary {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   border-color: var(--accent);
 }
 
 button.primary:hover {
   background: var(--accent-hover);
+  box-shadow: 0 2px 6px var(--accent-shadow-strong);
 }
 
 button.danger {
   background: var(--danger);
-  color: #fff;
-  border-color: var(--danger);
+  color: var(--on-accent);
 }
 
 button.danger:hover {
   background: var(--danger-hover);
+  box-shadow: 0 2px 6px var(--danger-shadow);
+}
+
+.add-task {
+  background: var(--accent);
+  color: var(--on-accent);
+  border: none;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all var(--transition-fast);
+}
+
+.add-task:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px var(--accent-shadow-strong);
 }
 
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
 /* Формы */
-
 .form {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
-  margin-bottom: var(--space-sm);
+  animation: fadeIn 0.3s ease-out;
 }
 
 .form input,
-.form textarea,
-.form select {
+.form textarea {
   width: 100%;
   padding: 6px 8px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   font-size: 0.85rem;
+  transition: border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.form input:focus,
+.form textarea:focus,
+.form select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 .form textarea {
@@ -231,36 +366,37 @@ button:disabled {
 }
 
 /* Модальные окна */
-.modal {
+.modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  animation: fadeInOverlay 0.3s ease-out forwards;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-content {
-  background: #fff;
   border-radius: var(--radius);
-  padding: var(--space-lg);
-  width: 400px;
-  max-width: 90%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: var(--space-md);
+  transform: scale(0.8);
+  animation: zoomIn 0.3s ease-out forwards;
 }
-/* Адаптивность */
 
-@media (max-width: 768px) {
-  .board {
-    padding: var(--space-sm);
-    gap: var(--space-sm);
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
   }
-
-  .column {
-    width: 90%;
-    min-width: 90%;
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }

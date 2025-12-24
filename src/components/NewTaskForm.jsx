@@ -40,25 +40,6 @@ export default function NewTaskForm({ dispatch, board, columnId, onClose }) {
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      {columnId ? null : (
-        <select
-          name="columnId"
-          value={formData.columnId}
-          onChange={(e) => {
-            setFormData((prev) => ({
-              ...prev,
-              columnId: Number(e.target.value),
-            }));
-          }}
-        >
-          <option value={0}>Выберите колонку</option>
-          {board.columns.map((column) => (
-            <option key={column.id} value={column.id}>
-              {column.title}
-            </option>
-          ))}
-        </select>
-      )}
       <input
         type="text"
         placeholder="Название задачи"
@@ -69,7 +50,6 @@ export default function NewTaskForm({ dispatch, board, columnId, onClose }) {
             title: e.target.value,
           }));
         }}
-        required
       />
 
       <input
@@ -94,7 +74,7 @@ export default function NewTaskForm({ dispatch, board, columnId, onClose }) {
             formData.title.trim() === ""
           }
         >
-          Добавить задачу
+          Добавить
         </button>
         <button type="button" onClick={onClose}>
           Отмена
