@@ -28,6 +28,17 @@ export default function App() {
 
       <NewColumnForm dispatch={dispatch} />
       <NewTaskForm dispatch={dispatch} board={board} />
+
+      <button
+        onClick={() =>
+          dispatch({
+            type: "MOVE_TASK",
+            payload: { fromColumnId: 1, toColumnId: 2, taskId: 1, toIndex: 0 },
+          })
+        }
+      >
+        Переместить задачу
+      </button>
     </>
   );
 }

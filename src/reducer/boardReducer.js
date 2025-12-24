@@ -73,11 +73,39 @@ function reducer(state, action) {
       return { ...state, columns: updated };
     }
     case "DELETE_COLUMN": {
-      const columnId  = action.payload.columnId;
+      const columnId = action.payload.columnId;
 
       const updated = state.columns.filter((column) => column.id !== columnId);
 
       return { ...state, columns: updated };
+    }
+    case "MOVE_TASK": {
+      const { fromColumnId, toColumnId, taskId, toIndex } = action.payload;
+
+      let taskToMove = null;
+
+      const updated = state.columns.map((column) => {
+        if (column.id === fromColumnId) {
+          const updatedTasks = column.tasks.filter((task) => {
+            if (task.id === taskId) {
+              taskToMove = task;
+            }
+          });
+          return { ...column, tasks: updatedTasks };
+        }
+        return column;
+      });
+
+      const inserted = updated.map((column) => {
+        if (column.id === toColumnId && taskToMove) {
+          const updatedTasks = [...column.tasks];
+          updatedTasks.splice(toIndex, 0, taskToMove);
+          return { ...column, tasks: updatedTasks };
+        }
+        return column;
+      });
+
+      return { ...state, columns: inserted };
     }
   }
 }
