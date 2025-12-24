@@ -6,7 +6,15 @@ export default function TaskCard({
   isLast,
 }) {
   return (
-    <div>
+    <div
+      draggable="true"
+      onDragStart={(e) => {
+        e.dataTransfer.setData(
+          "text/plain",
+          JSON.stringify({ fromColumnId: columnId, taskId: task.id })
+        );
+      }}
+    >
       <h3>{task.title}</h3>
       <p>{task.description}</p>
       {isFirst ? null : (
