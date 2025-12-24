@@ -1,13 +1,15 @@
 import { useState } from "react";
-
 import TaskCard from "./TaskCard";
-import NewTaskForm from "./NewTaskForm.jsx";
+import NewTaskForm from "./NewTaskForm";
 
 export default function Column({ column, dispatch }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const handleDrop = (e) => {
     e.preventDefault();
+    setIsDragOver(false);
+
     const data = JSON.parse(e.dataTransfer.getData("text/plain"));
 
     if (data.fromColumnId === column.id) return;
@@ -25,30 +27,25 @@ export default function Column({ column, dispatch }) {
   const handleDragOver = (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
   };
 
   return (
-    <div className="column">
+    <div
+      className={`column ${isDragOver ? "drag-over" : ""}`}
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+    >
       <div className="column-header">
         <h2 className="column-title">{column.title}</h2>
-        <button
-          className="column-delete"
-          onClick={() =>
-            dispatch({
-              type: "DELETE_COLUMN",
-              payload: { columnId: column.id },
-            })
-          }
-        >
-          Удалить
-        </button>
       </div>
 
-      <div
-        className="column-body"
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-      >
+      <div className="column-body">
         {column.tasks.map((task) => (
           <TaskCard
             key={task.id}
@@ -61,7 +58,18 @@ export default function Column({ column, dispatch }) {
 
       <div className="column-footer">
         <button className="primary" onClick={() => setIsModalOpen(true)}>
-          + Добавить задачу
+          Новая задача
+        </button>
+        <button
+          className="column-delete"
+          onClick={() =>
+            dispatch({
+              type: "DELETE_COLUMN",
+              payload: { columnId: column.id },
+            })
+          }
+        >
+          Удалить
         </button>
       </div>
 

@@ -40,6 +40,10 @@ export default function App() {
       </header>
 
       <Board board={board} dispatch={dispatch} />
+
+      <footer className="app-footer">
+        &copy; 2025. Все права защищены бла бла бла.
+      </footer>
     </div>
   );
 }

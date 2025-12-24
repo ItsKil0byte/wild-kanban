@@ -5,10 +5,11 @@
   --card-bg: #ffffff;
   --accent: #2563eb;
   --accent-hover: #1d4ed8;
-  --danger: #dc2626;
+  --danger: #ff3c3c;
+  --danger-hover: #b91c1c;
   --text: #111827;
   --muted: #6b7280;
-  --border: #e5e7eb;
+  --border: #d2d3d5;
 
   --radius: 8px;
   --radius-sm: 6px;
@@ -42,6 +43,15 @@ body {
   padding: var(--space-lg);
   border-bottom: 1px solid var(--border);
   background: #fff;
+}
+
+.app-footer {
+  background: #fff;
+  padding: var(--space-md);
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
 }
 
 .app-title {
@@ -83,20 +93,20 @@ body {
 
 .column-title {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 750;
   margin: 0;
 }
 
 .column-delete {
-  background: none;
-  border: none;
-  color: var(--danger);
+  background: var(--danger);
+  color: #fff;
+  border: 1px solid var(--border);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 .column-delete:hover {
-  text-decoration: underline;
+  background: var(--danger-hover);
 }
 
 .column-body {
@@ -115,12 +125,16 @@ body {
 .column-footer {
   padding: var(--space-md);
   border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* Задачи */
 .task-card {
   background: var(--card-bg);
   border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
   padding: var(--space-sm);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   cursor: grab;
@@ -132,7 +146,7 @@ body {
 
 .task-title {
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   margin: 0 0 var(--space-xs) 0;
 }
 
@@ -173,7 +187,13 @@ button.primary:hover {
 }
 
 button.danger {
-  color: var(--danger);
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+}
+
+button.danger:hover {
+  background: var(--danger-hover);
 }
 
 button:disabled {
