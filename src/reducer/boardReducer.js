@@ -18,15 +18,25 @@ const initialState = {
       tasks: [],
     },
     {
-        id: 2,
-        title: "В процессе",
-        tasks: [],
-    }
+      id: 2,
+      title: "В процессе",
+      tasks: [],
+    },
   ],
 };
 
 function reducer(state, action) {
-  return state;
+  switch (action.type) {
+    case "ADD_COLUMN": {
+      const column = {
+        id: Date.now(), // TODO: Подумать над улучшение генерации ID
+        title: action.payload.title,
+        tasks: [],
+      };
+
+      return { ...state, columns: [...state.columns, column] };
+    }
+  }
 }
 
 export { reducer, initialState };
