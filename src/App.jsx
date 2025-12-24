@@ -4,6 +4,7 @@ import { reducer, initialState } from "./reducer/boardReducer.js";
 import "./App.css";
 import Board from "./components/Board.jsx";
 import NewColumnForm from "./components/NewColumnForm.jsx";
+import NewTaskForm from "./components/NewTaskForm.jsx";
 
 /*
 Базовая структура:
@@ -26,6 +27,7 @@ export default function App() {
       {/* <button onClick={addColumn}>Добавить колонку</button> */}
 
       <NewColumnForm dispatch={dispatch} />
+      <NewTaskForm dispatch={dispatch} board={board} />
     </>
   );
 }
