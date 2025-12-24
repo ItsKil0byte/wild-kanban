@@ -1,4 +1,6 @@
 import Column from "./Column";
+import NewColumnForm from "./NewColumnForm";
+import NewTaskForm from "./NewTaskForm";
 
 export default function Board({ board, dispatch }) {
   return (
@@ -12,6 +14,8 @@ export default function Board({ board, dispatch }) {
           isLast={column.id === board.columns.length}
         />
       ))}
+      <NewColumnForm dispatch={dispatch} />
+      <NewTaskForm dispatch={dispatch} board={board} />
     </div>
   );
 }
