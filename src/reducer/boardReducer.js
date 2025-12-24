@@ -20,7 +20,7 @@ const initialState = {
           id: 1,
           title: "Создать макет",
           description: "Разработать макет для новой функции",
-        }
+        },
       ],
     },
     {
@@ -51,6 +51,21 @@ function reducer(state, action) {
       const updated = state.columns.map((column) => {
         if (column.id === columnId) {
           return { ...column, tasks: [...column.tasks, task] };
+        }
+        return column;
+      });
+
+      return { ...state, columns: updated };
+    }
+    case "DELETE_TASK": {
+      const { columnId, taskId } = action.payload;
+
+      const updated = state.columns.map((column) => {
+        if (column.id === columnId) {
+          return {
+            ...column,
+            tasks: column.tasks.filter((task) => task.id !== taskId),
+          };
         }
         return column;
       });
