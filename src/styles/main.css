@@ -1,3 +1,6 @@
+/* Шрифты */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
 /* Переменные */
 :root {
   --bg: #f4f6fb;
@@ -53,10 +56,10 @@
 
 body {
   margin: 0;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
   background: var(--bg);
   color: var(--text);
-  transition: background var(--transition-normal);
 }
 
 /* Страница */
@@ -64,8 +67,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  opacity: 1;
-  animation: fadeIn 0.5s ease-out forwards;
 }
 
 @keyframes fadeIn {
@@ -83,7 +84,6 @@ body {
   padding: var(--space-lg);
   border-bottom: 1px solid var(--border);
   background: var(--surface);
-  transition: box-shadow var(--transition-fast);
 }
 
 .app-header:hover {
@@ -97,14 +97,16 @@ body {
   text-align: center;
   font-size: 0.85rem;
   color: var(--muted);
-  transition: background var(--transition-fast);
+}
+
+.app-footer:hover {
+  box-shadow: 0 -2px 8px var(--shadow-md);
 }
 
 .app-title {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
-  transition: color var(--transition-fast);
 }
 
 /* Доска */
@@ -212,18 +214,6 @@ body {
   box-shadow: 0 1px 2px var(--shadow-xsm);
   cursor: grab;
   transition: all var(--transition-normal);
-  animation: fadeInTask 0.3s ease-out forwards;
-}
-
-@keyframes fadeInTask {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .task-card:active {
@@ -274,8 +264,8 @@ button {
   padding: 6px 12px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 0.85rem;
   transition: all var(--transition-fast);
+  font-family: 'JetBrains Mono', monospace;
 }
 
 button:hover {
@@ -333,13 +323,14 @@ button:disabled {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn var(--transition-normal);
 }
 
 .form input,
 .form textarea {
   width: 100%;
   padding: 6px 8px;
+  font-family: 'JetBrains Mono', monospace;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   font-size: 0.85rem;
@@ -371,32 +362,9 @@ button:disabled {
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: fadeInOverlay 0.3s ease-out forwards;
-}
-
-@keyframes fadeInOverlay {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 
 .modal-content {
   border-radius: var(--radius);
   padding: var(--space-md);
-  transform: scale(0.8);
-  animation: zoomIn 0.3s ease-out forwards;
-}
-
-@keyframes zoomIn {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
 }
