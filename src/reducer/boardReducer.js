@@ -15,7 +15,13 @@ const initialState = {
     {
       id: 1,
       title: "Запланировано",
-      tasks: [],
+      tasks: [
+        {
+          id: 1,
+          title: "Создать макет",
+          description: "Разработать макет для новой функции",
+        }
+      ],
     },
     {
       id: 2,
