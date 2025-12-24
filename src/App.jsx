@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 import { reducer, initialState } from "./reducer/boardReducer.js";
 
 import "./App.css";
@@ -16,7 +16,23 @@ Task -> Id, Title, Description
 */
 
 export default function App() {
+  const savedBoard = localStorage.getItem("board");
+  if (savedBoard) {
+    try {
+      const parsed = JSON.parse(savedBoard);
+      if (parsed && Array.isArray(parsed.columns)) {
+        initialState.columns = parsed.columns;
+      }
+    } catch (e) {
+      console.error("Ошибка при парсинге сохранённой доски:", e);
+    }
+  }
+
   const [board, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    localStorage.setItem("board", JSON.stringify(board));
+  }, [board]);
 
   return (
     <>
