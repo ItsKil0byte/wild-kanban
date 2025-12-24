@@ -72,6 +72,13 @@ function reducer(state, action) {
 
       return { ...state, columns: updated };
     }
+    case "DELETE_COLUMN": {
+      const columnId  = action.payload.columnId;
+
+      const updated = state.columns.filter((column) => column.id !== columnId);
+
+      return { ...state, columns: updated };
+    }
   }
 }
 
