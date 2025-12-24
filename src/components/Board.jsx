@@ -2,7 +2,7 @@ import Column from "./Column";
 
 export default function Board({ board, dispatch }) {
   return (
-    <div>
+    <div className="board">
       {board.columns.map((column) => (
         <Column
           key={column.id}

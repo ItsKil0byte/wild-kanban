@@ -5,6 +5,7 @@ export default function NewColumnForm({ dispatch }) {
 
   return (
     <form
+      className="form"
       onSubmit={(e) => {
         e.preventDefault(); // Не перезагружаем страницу
         dispatch({ type: "ADD_COLUMN", payload: { title: inputValue } });
@@ -17,7 +18,7 @@ export default function NewColumnForm({ dispatch }) {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <button type="submit" disabled={!inputValue || inputValue.trim() === ""}>
+      <button className="primary" type="submit" disabled={!inputValue || inputValue.trim() === ""}>
         Добавить колонку
       </button>
     </form>

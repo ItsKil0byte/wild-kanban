@@ -23,25 +23,36 @@ export default function Column({ column, dispatch }) {
   };
 
   return (
-    <div onDrop={handleDrop} onDragOver={handleDragOver}>
-      <h2>{column.title}</h2>
+    <div className="column">
+      <div className="column-header">
+        <h2 className="column-title">{column.title}</h2>
+        <button
+          className="column-delete"
+          onClick={() =>
+            dispatch({
+              type: "DELETE_COLUMN",
+              payload: { columnId: column.id },
+            })
+          }
+        >
+          Удалить
+        </button>
+      </div>
 
-      <button
-        onClick={() =>
-          dispatch({ type: "DELETE_COLUMN", payload: { columnId: column.id } })
-        }
+      <div
+        className="column-body"
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
       >
-        🗑️
-      </button>
-
-      {column.tasks.map((task) => (
-        <TaskCard
-          key={task.id}
-          task={task}
-          columnId={column.id}
-          dispatch={dispatch}
-        />
-      ))}
+        {column.tasks.map((task) => (
+          <TaskCard
+            key={task.id}
+            task={task}
+            columnId={column.id}
+            dispatch={dispatch}
+          />
+        ))}
+      </div>
     </div>
   );
 }

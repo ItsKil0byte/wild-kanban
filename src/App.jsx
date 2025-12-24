@@ -35,26 +35,16 @@ export default function App() {
   }, [board]);
 
   return (
-    <>
-      <h1>Wild Kanban!</h1>
-      {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
+    <div className="app">
+      <header className="app-header">
+        <h1 className="app-title">Дикий Ка(н)бан!</h1>
+      </header>
 
       <Board board={board} dispatch={dispatch} />
-      {/* <button onClick={addColumn}>Добавить колонку</button> */}
 
       <NewColumnForm dispatch={dispatch} />
       <NewTaskForm dispatch={dispatch} board={board} />
 
-      <button
-        onClick={() =>
-          dispatch({
-            type: "MOVE_TASK",
-            payload: { fromColumnId: 1, toColumnId: 2, taskId: 1, toIndex: 0 },
-          })
-        }
-      >
-        Переместить задачу
-      </button>
-    </>
+    </div>
   );
 }

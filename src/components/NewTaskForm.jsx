@@ -9,6 +9,7 @@ export default function NewTaskForm({ dispatch, board }) {
 
   return (
     <form
+      className="form"
       onSubmit={(e) => {
         e.preventDefault();
         dispatch({
@@ -65,6 +66,7 @@ export default function NewTaskForm({ dispatch, board }) {
         }}
       />
       <button
+        className="primary"
         type="submit"
         disabled={
           !formData.title || !formData.columnId || formData.title.trim() === ""

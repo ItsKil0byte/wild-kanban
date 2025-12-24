@@ -1,6 +1,7 @@
 export default function TaskCard({ task, columnId, dispatch }) {
   return (
     <div
+      className="task-card"
       draggable={true}
       onDragStart={(e) => {
         e.dataTransfer.setData(
@@ -13,19 +14,24 @@ export default function TaskCard({ task, columnId, dispatch }) {
         e.dataTransfer.effectAllowed = "move";
       }}
     >
-      <h3>{task.title}</h3>
-      <p>{task.description}</p>
+      <p className="task-title">{task.title}</p>
+      {task.description && (
+        <p className="task-description">{task.description}</p>
+      )}
 
-      <button
-        onClick={() =>
-          dispatch({
-            type: "DELETE_TASK",
-            payload: { columnId, taskId: task.id },
-          })
-        }
-      >
-        🗑️
-      </button>
+      <div className="task-actions">
+        <button
+          className="danger"
+          onClick={() =>
+            dispatch({
+              type: "DELETE_TASK",
+              payload: { columnId, taskId: task.id },
+            })
+          }
+        >
+          Удалить
+        </button>
+      </div>
     </div>
   );
 }
