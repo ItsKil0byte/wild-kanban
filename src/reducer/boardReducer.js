@@ -46,6 +46,7 @@ function reducer(state, action) {
         if (column.id === columnId) {
           return { ...column, tasks: [...column.tasks, task] };
         }
+        return column;
       });
 
       return { ...state, columns: updated };
