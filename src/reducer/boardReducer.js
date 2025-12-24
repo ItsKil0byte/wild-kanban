@@ -27,14 +27,28 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
+    // TODO: Подумать над улучшение генерации ID
     case "ADD_COLUMN": {
       const column = {
-        id: Date.now(), // TODO: Подумать над улучшение генерации ID
+        id: Date.now(),
         title: action.payload.title,
         tasks: [],
       };
 
       return { ...state, columns: [...state.columns, column] };
+    }
+    case "ADD_TASK": {
+      const { columnId, title, description } = action.payload;
+
+      const task = { id: Date.now(), title, description };
+
+      const updated = state.columns.map((column) => {
+        if (column.id === columnId) {
+          return { ...column, tasks: [...column.tasks, task] };
+        }
+      });
+
+      return { ...state, columns: updated };
     }
   }
 }
