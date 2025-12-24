@@ -1,48 +1,64 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function NewTaskForm({ dispatch, board }) {
+export default function NewTaskForm({ dispatch, board, columnId, onClose }) {
   const [formData, setFormData] = useState({
-    columnId: 0,
+    columnId: columnId || 0,
     title: "",
     description: "",
   });
 
+  useEffect(() => {
+    if (columnId) {
+      setFormData((prev) => ({
+        ...prev,
+        columnId: columnId,
+      }));
+    }
+  }, [columnId]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!formData.title.trim() || !formData.columnId) return;
+
+    dispatch({
+      type: "ADD_TASK",
+      payload: {
+        ...formData,
+        id: Date.now(),
+      },
+    });
+
+    setFormData({
+      columnId: columnId || 0,
+      title: "",
+      description: "",
+    });
+
+    if (onClose) onClose();
+  };
+
   return (
-    <form
-      className="form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        dispatch({
-          type: "ADD_TASK",
-          payload: {
-            ...formData,
-            id: Date.now(),
-          },
-        });
-        setFormData({
-          columnId: 0,
-          title: "",
-          description: "",
-        });
-      }}
-    >
-      <select
-        name="columnId"
-        value={formData.columnId}
-        onChange={(e) => {
-          setFormData((prev) => ({
-            ...prev,
-            columnId: Number(e.target.value),
-          }));
-        }}
-      >
-        <option value={0}>Выберите колонку</option>
-        {board.columns.map((column) => (
-          <option key={column.id} value={column.id}>
-            {column.title}
-          </option>
-        ))}
-      </select>
+    <form className="form" onSubmit={handleSubmit}>
+      {columnId ? null : (
+        <select
+          name="columnId"
+          value={formData.columnId}
+          onChange={(e) => {
+            setFormData((prev) => ({
+              ...prev,
+              columnId: Number(e.target.value),
+            }));
+          }}
+        >
+          <option value={0}>Выберите колонку</option>
+          {board.columns.map((column) => (
+            <option key={column.id} value={column.id}>
+              {column.title}
+            </option>
+          ))}
+        </select>
+      )}
       <input
         type="text"
         placeholder="Название задачи"
@@ -53,7 +69,9 @@ export default function NewTaskForm({ dispatch, board }) {
             title: e.target.value,
           }));
         }}
+        required
       />
+
       <input
         type="text"
         placeholder="Описание задачи"
@@ -65,15 +83,23 @@ export default function NewTaskForm({ dispatch, board }) {
           }));
         }}
       />
-      <button
-        className="primary"
-        type="submit"
-        disabled={
-          !formData.title || !formData.columnId || formData.title.trim() === ""
-        }
-      >
-        Добавить задачу
-      </button>
+
+      <div className="form-actions">
+        <button
+          className="primary"
+          type="submit"
+          disabled={
+            !formData.title ||
+            !formData.columnId ||
+            formData.title.trim() === ""
+          }
+        >
+          Добавить задачу
+        </button>
+        <button type="button" onClick={onClose}>
+          Отмена
+        </button>
+      </div>
     </form>
   );
 }

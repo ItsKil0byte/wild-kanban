@@ -1,6 +1,11 @@
+import { useState } from "react";
+
 import TaskCard from "./TaskCard";
+import NewTaskForm from "./NewTaskForm.jsx";
 
 export default function Column({ column, dispatch }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleDrop = (e) => {
     e.preventDefault();
     const data = JSON.parse(e.dataTransfer.getData("text/plain"));
@@ -53,6 +58,25 @@ export default function Column({ column, dispatch }) {
           />
         ))}
       </div>
+
+      <div className="column-footer">
+        <button className="primary" onClick={() => setIsModalOpen(true)}>
+          + Добавить задачу
+        </button>
+      </div>
+
+      {isModalOpen && (
+        <div className="modal" onClick={() => setIsModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <NewTaskForm
+              dispatch={dispatch}
+              board={{ columns: [column] }}
+              columnId={column.id}
+              onClose={() => setIsModalOpen(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

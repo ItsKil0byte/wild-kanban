@@ -15,7 +15,6 @@ export default function Board({ board, dispatch }) {
         />
       ))}
       <NewColumnForm dispatch={dispatch} />
-      <NewTaskForm dispatch={dispatch} board={board} />
     </div>
   );
 }
