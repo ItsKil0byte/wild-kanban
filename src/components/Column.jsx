@@ -30,8 +30,11 @@ export default function Column({ column, dispatch }) {
     setIsDragOver(true);
   };
 
-  const handleDragLeave = () => {
-    setIsDragOver(false);
+  const handleDeletion = () => {
+    dispatch({
+      type: "DELETE_COLUMN",
+      payload: { columnId: column.id },
+    });
   };
 
   return (
@@ -39,7 +42,7 @@ export default function Column({ column, dispatch }) {
       className={`column ${isDragOver ? "drag-over" : ""}`}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
+      onDragLeave={() => setIsDragOver(false)}
     >
       <div className="column-header">
         <h2 className="column-title">{column.title}</h2>
@@ -60,15 +63,7 @@ export default function Column({ column, dispatch }) {
         <button className="add-task" onClick={() => setIsModalOpen(true)}>
           Новая задача
         </button>
-        <button
-          className="danger"
-          onClick={() =>
-            dispatch({
-              type: "DELETE_COLUMN",
-              payload: { columnId: column.id },
-            })
-          }
-        >
+        <button className="danger" onClick={handleDeletion}>
           Удалить
         </button>
       </div>
@@ -78,7 +73,6 @@ export default function Column({ column, dispatch }) {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <NewTaskForm
               dispatch={dispatch}
-              board={{ columns: [column] }}
               columnId={column.id}
               onClose={() => setIsModalOpen(false)}
             />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function NewTaskForm({ dispatch, board, columnId, onClose }) {
+export default function NewTaskForm({ dispatch, columnId, onClose }) {
   const [formData, setFormData] = useState({
     columnId: columnId || 0,
     title: "",
