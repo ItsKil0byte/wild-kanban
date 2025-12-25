@@ -1,36 +1,32 @@
 import { useReducer, useEffect } from "react";
 import { reducer, initialState } from "./reducer/boardReducer.js";
 
-import "./App.css";
 import Board from "./components/Board.jsx";
 
-
-/*
-Базовая структура:
-
-Board -> Columns -> Массив Columns
-Column -> Id, Title, Tasks -> Массив Tasks
-Task -> Id, Title, Description
-
-*/
+const STORAGE_KEY = "board";
 
 export default function App() {
-  const savedBoard = localStorage.getItem("board");
-  if (savedBoard) {
-    try {
-      const parsed = JSON.parse(savedBoard);
-      if (parsed && Array.isArray(parsed.columns)) {
-        initialState.columns = parsed.columns;
-      }
-    } catch (e) {
-      console.error("Ошибка при парсинге сохранённой доски:", e);
-    }
-  }
+  const initBoard = () => {
+    const savedBoard = localStorage.getItem(STORAGE_KEY);
 
-  const [board, dispatch] = useReducer(reducer, initialState);
+    if (savedBoard) {
+      try {
+        const parsed = JSON.parse(savedBoard);
+        if (parsed && Array.isArray(parsed.columns)) {
+          return { initialState, ...parsed };
+        }
+      } catch (e) {
+        console.error("Ошибка при парсинге сохранённой доски:", e);
+      }
+    }
+
+    return initialState;
+  };
+
+  const [board, dispatch] = useReducer(reducer, undefined, initBoard);
 
   useEffect(() => {
-    localStorage.setItem("board", JSON.stringify(board));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(board));
   }, [board]);
 
   return (
