@@ -1,12 +1,11 @@
 export default function TaskCard({ task, columnId, dispatch }) {
   const handleDragStart = (e) => {
-    e.dataTransfer.setData(
-      "text/plain",
-      JSON.stringify({
-        fromColumnId: columnId,
-        taskId: task.id,
-      })
-    );
+    const data = JSON.stringify({
+      fromColumnId: columnId,
+      taskId: task.id,
+    });
+
+    e.dataTransfer.setData("text/plain", data);
     e.dataTransfer.effectAllowed = "move";
 
     e.target.classList.add("dragging");
@@ -14,6 +13,13 @@ export default function TaskCard({ task, columnId, dispatch }) {
 
   const handleDragEnd = (e) => {
     e.target.classList.remove("dragging");
+  };
+
+  const handleDeletion = () => {
+    dispatch({
+      type: "DELETE_TASK",
+      payload: { columnId, taskId: task.id },
+    });
   };
 
   return (
@@ -27,16 +33,8 @@ export default function TaskCard({ task, columnId, dispatch }) {
       <p className="task-description">{task.description}</p>
 
       <div className="task-actions">
-        <button
-          onClick={() =>
-            dispatch({
-              type: "DELETE_TASK",
-              payload: { columnId, taskId: task.id },
-            })
-          }
-          className="danger"
-        >
-          🗑️
+        <button onClick={handleDeletion} className="danger">
+          Удалить
         </button>
       </div>
     </div>
