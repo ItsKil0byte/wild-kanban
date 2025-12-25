@@ -1,5 +1,5 @@
 import { useReducer, useEffect } from "react";
-import { reducer, initialState } from "./reducer/boardReducer.js";
+import { reducer, initialBoard } from "./reducer/boardReducer.js";
 
 import Board from "./components/Board.jsx";
 
@@ -13,14 +13,14 @@ export default function App() {
       try {
         const parsed = JSON.parse(savedBoard);
         if (parsed && Array.isArray(parsed.columns)) {
-          return { initialState, ...parsed };
+          return { initialBoard, ...parsed };
         }
       } catch (e) {
         console.error("Ошибка при парсинге сохранённой доски:", e);
       }
     }
 
-    return initialState;
+    return initialBoard;
   };
 
   const [board, dispatch] = useReducer(reducer, undefined, initBoard);

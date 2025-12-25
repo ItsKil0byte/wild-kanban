@@ -1,39 +1,47 @@
-/* 
-
-Reducer:
-
-1. Добавление Column.
-2. Удаление Column.
-3. Добавление Task.
-4. Удаление Task.
-5. Перемещение Task между Columns.
-
-*/
-
-const initialState = {
+const initialBoard = {
   columns: [
     {
       id: 1,
-      title: "Запланировано",
+      title: "To Do",
       tasks: [
-        {
-          id: 1,
-          title: "Создать макет",
-          description: "Разработать макет для новой функции",
-        },
+        { id: 1, title: "Задача 1", description: "Описание задачи 1" },
+        { id: 2, title: "Задача 2", description: "Описание задачи 2" },
       ],
     },
     {
       id: 2,
-      title: "В процессе",
+      title: "In Progress",
+      tasks: [{ id: 3, title: "Задача 3", description: "Описание задачи 3" }],
+    },
+    {
+      id: 3,
+      title: "Done",
       tasks: [],
     },
   ],
 };
 
-function reducer(state, action) {
+const updateColumn = (columns, columnId, updateFn) => {
+  return columns.map((c) => {
+    if (c.id === columnId) {
+      return { ...c, ...updateFn(c) };
+    }
+    return c;
+  });
+};
+
+const findTask = (columns, taskId) => {
+  for (const column of columns) {
+    const task = column.tasks.find((t) => t.id === taskId);
+    if (task) {
+      return { task, columnId: column.id };
+    }
+  }
+  return null;
+};
+
+function reducer(state = initialBoard, action) {
   switch (action.type) {
-    // TODO: Подумать над улучшение генерации ID
     case "ADD_COLUMN": {
       const column = {
         id: Date.now(),
@@ -43,75 +51,57 @@ function reducer(state, action) {
 
       return { ...state, columns: [...state.columns, column] };
     }
+    case "DELETE_COLUMN": {
+      const columnId = action.payload.columnId;
+
+      const updated = state.columns.filter((c) => c.id !== columnId);
+
+      return { ...state, columns: updated };
+    }
     case "ADD_TASK": {
       const { columnId, title, description } = action.payload;
 
       const task = { id: Date.now(), title, description };
 
-      const updated = state.columns.map((column) => {
-        if (column.id === columnId) {
-          return { ...column, tasks: [...column.tasks, task] };
-        }
-        return column;
-      });
+      const updated = updateColumn(state.columns, columnId, (c) => ({
+        tasks: [...c.tasks, task],
+      }));
 
       return { ...state, columns: updated };
     }
     case "DELETE_TASK": {
       const { columnId, taskId } = action.payload;
 
-      const updated = state.columns.map((column) => {
-        if (column.id === columnId) {
-          return {
-            ...column,
-            tasks: column.tasks.filter((task) => task.id !== taskId),
-          };
-        }
-        return column;
-      });
-
-      return { ...state, columns: updated };
-    }
-    case "DELETE_COLUMN": {
-      const columnId = action.payload.columnId;
-
-      const updated = state.columns.filter((column) => column.id !== columnId);
+      const updated = updateColumn(state.columns, columnId, (c) => ({
+        tasks: c.tasks.filter((t) => t.id !== taskId),
+      }));
 
       return { ...state, columns: updated };
     }
     case "MOVE_TASK": {
       const { fromColumnId, toColumnId, taskId } = action.payload;
 
-      let taskToMove = null;
+      const taskData = findTask(state.columns, taskId);
 
-      const updated = state.columns.map((column) => {
-        if (column.id === fromColumnId) {
-          const tasks = column.tasks.filter((task) => {
-            if (task.id === taskId) {
-              taskToMove = task;
-              return false;
-            }
-            return true;
-          });
-          return { ...column, tasks: tasks };
-        }
-        return column;
-      });
-
-      if (!taskToMove) {
+      if (!taskData) {
         return state;
       }
 
-      const finaled = updated.map((column) => {
-        if (column.id === toColumnId) {
-          return { ...column, tasks: [...column.tasks, taskToMove] };
-        }
-        return column;
-      });
+      const { task } = taskData;
+
+      const updated = updateColumn(state.columns, fromColumnId, (c) => ({
+        tasks: c.tasks.filter((t) => t.id !== taskId),
+      }));
+
+      const finaled = updateColumn(updated, toColumnId, (c) => ({
+        tasks: [...c.tasks, task],
+      }));
 
       return { ...state, columns: finaled };
     }
+    default:
+      return state;
   }
 }
 
-export { reducer, initialState };
+export { reducer, initialBoard };
